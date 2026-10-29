@@ -4,7 +4,7 @@
 #
 # Usage:
 #   ./redeploy.sh                                   # re-apply current config
-#   ./redeploy.sh ghcr.io/intergalactictech/signature:sha-abc123   # switch image first
+#   ./redeploy.sh ghcr.io/intergalactictech/documenso:sha-abc123   # switch image first
 #
 # Env: AWS_REGION (default us-east-1), SSM_PREFIX (default /signature),
 #      INSTANCE_NAME (default signature)

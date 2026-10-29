@@ -111,7 +111,7 @@ an AATL-listed CA and run `./create-signing-cert.sh --p12 your-cert.p12`.
 | Task | How |
 |---|---|
 | Change config | Edit `/signature/env` in SSM, then `scripts/redeploy.sh` |
-| Deploy a new image | `scripts/redeploy.sh ghcr.io/intergalactictech/signature:sha-<commit>` |
+| Deploy a new image | `scripts/redeploy.sh ghcr.io/intergalactictech/documenso:sha-<commit>` |
 | Upgrade to a new upstream release | Merge upstream into `main` (CI builds the image), or for unmodified upstream: `scripts/redeploy.sh documenso/documenso:vX.Y.Z` |
 | Shell on host | `aws ssm start-session --target $(terraform output -raw instance_id)` |
 | Logs | CloudWatch → `/signature/app` (streams `app`, `caddy`) |
@@ -121,7 +121,7 @@ Database migrations run automatically on container start.
 
 ## Building our own image
 
-`.github/workflows/signature-image.yml` builds `ghcr.io/intergalactictech/signature`
+`.github/workflows/signature-image.yml` builds `ghcr.io/intergalactictech/documenso`
 (arm64) on every push to `main`. After the first build, set the GHCR package
 visibility to **public** (package settings) so the host can pull it without
 credentials. Then switch the host to it with `scripts/redeploy.sh`.
