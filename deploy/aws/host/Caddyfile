@@ -1,0 +1,14 @@
+# Caddy obtains and renews the Let's Encrypt certificate automatically once
+# DNS for SIGNATURE_DOMAIN points at this host's Elastic IP.
+{$SIGNATURE_DOMAIN} {
+	encode zstd gzip
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		-Server
+	}
+
+	reverse_proxy app:3000
+}

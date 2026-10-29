@@ -1,0 +1,56 @@
+# Runs on the EC2 host at /opt/signature. deploy.sh renders .env and cert.p12
+# from SSM Parameter Store before calling `docker compose up`.
+name: signature
+
+services:
+  app:
+    image: ${SIGNATURE_IMAGE:?SIGNATURE_IMAGE must be set}
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - PORT=3000
+      - NEXT_PRIVATE_INTERNAL_WEBAPP_URL=http://localhost:3000
+      - NEXT_PRIVATE_SIGNING_TRANSPORT=local
+      - NEXT_PRIVATE_SIGNING_LOCAL_FILE_PATH=/opt/documenso/cert.p12
+    volumes:
+      - ./cert.p12:/opt/documenso/cert.p12:ro
+    expose:
+      - '3000'
+    healthcheck:
+      test: ['CMD-SHELL', 'wget -qO- http://localhost:3000/api/health >/dev/null || exit 1']
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 120s
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: ${AWS_REGION:?AWS_REGION must be set}
+        awslogs-group: ${LOG_GROUP:?LOG_GROUP must be set}
+        awslogs-stream: app
+
+  caddy:
+    image: caddy:2.8
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - '80:80'
+      - '443:443'
+      - '443:443/udp'
+    environment:
+      - SIGNATURE_DOMAIN=${SIGNATURE_DOMAIN:?SIGNATURE_DOMAIN must be set}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: ${AWS_REGION}
+        awslogs-group: ${LOG_GROUP}
+        awslogs-stream: caddy
+
+volumes:
+  caddy_data:
+  caddy_config:

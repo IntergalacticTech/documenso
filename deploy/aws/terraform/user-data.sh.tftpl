@@ -1,0 +1,34 @@
+#!/bin/bash
+set -euxo pipefail
+
+dnf install -y docker
+mkdir -p /usr/local/lib/docker/cli-plugins
+curl -fsSL "https://github.com/docker/compose/releases/download/v2.29.7/docker-compose-linux-aarch64" \
+  -o /usr/local/lib/docker/cli-plugins/docker-compose
+chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
+systemctl enable --now docker
+
+mkdir -p /opt/signature
+cd /opt/signature
+
+cat > compose.yml <<'SIGNATURE_EOF'
+${compose}
+SIGNATURE_EOF
+
+cat > Caddyfile <<'SIGNATURE_EOF'
+${caddyfile}
+SIGNATURE_EOF
+
+cat > deploy.sh <<'SIGNATURE_EOF'
+${deploy_sh}
+SIGNATURE_EOF
+chmod 700 deploy.sh
+
+cat > deploy.conf <<'SIGNATURE_EOF'
+AWS_REGION=${aws_region}
+SSM_PREFIX=${ssm_prefix}
+SIGNATURE_DOMAIN=${domain}
+LOG_GROUP=${log_group}
+SIGNATURE_EOF
+
+./deploy.sh

@@ -1,0 +1,11 @@
+# Copy to terraform.tfvars (git-ignored) and fill in.
+google_client_id     = "1234567890-xxxxxxxx.apps.googleusercontent.com"
+google_client_secret = "GOCSPX-..."
+
+# Defaults, override if needed:
+# aws_region             = "us-east-1"
+# domain                 = "signature.victorycto.com"
+# allowed_signup_domains = "victorycto.com"
+# email_from_address     = "signature@victorycto.com"
+# email_from_name        = "Victory CTO Signature"
+# image                  = "documenso/documenso:v2.21.1"
