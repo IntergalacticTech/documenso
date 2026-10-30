@@ -46,9 +46,15 @@ In Google Cloud Console, use a project owned by the victorycto.com Workspace:
 
 ### 2. Provision AWS
 
+All inputs and secrets are listed in [`.env.example`](.env.example). You
+supply only AWS credentials and the Google client ID/secret. Terraform
+generates the rest (DB password, app keys, SES SMTP credentials) into SSM.
+
 ```bash
-cd deploy/aws/terraform
-cp terraform.tfvars.example terraform.tfvars   # add the Google client ID/secret
+cd deploy/aws
+cp .env.example .env        # fill in Part 1
+set -a; source .env; set +a
+cd terraform
 # Recommended: enable the S3 backend block in versions.tf first.
 terraform init
 terraform apply
