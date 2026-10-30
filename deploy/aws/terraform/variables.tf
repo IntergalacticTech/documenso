@@ -46,11 +46,21 @@ variable "db_allocated_storage_gb" {
 variable "google_client_id" {
   description = "OAuth client ID from Google Cloud Console (Web application, consent screen type Internal)."
   type        = string
+
+  validation {
+    condition     = endswith(var.google_client_id, ".apps.googleusercontent.com")
+    error_message = "Set TF_VAR_google_client_id (see deploy/aws/.env.example)."
+  }
 }
 
 variable "google_client_secret" {
   type      = string
   sensitive = true
+
+  validation {
+    condition     = length(var.google_client_secret) > 0
+    error_message = "Set TF_VAR_google_client_secret (see deploy/aws/.env.example)."
+  }
 }
 
 variable "email_from_domain" {
