@@ -44,6 +44,8 @@ locals {
     google_client_id         = var.google_client_id
     google_client_secret     = var.google_client_secret
     allowed_signup_domains   = var.allowed_signup_domains
+    single_organisation_url  = var.single_organisation_url
+    single_organisation_name = var.single_organisation_name
   })
 }
 

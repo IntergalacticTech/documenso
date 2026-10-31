@@ -120,7 +120,7 @@ an AATL-listed CA and run `./create-signing-cert.sh --p12 your-cert.p12`.
 | Task | How |
 |---|---|
 | Change config | Edit `/signature/env` in SSM, then `scripts/redeploy.sh` |
-| Deploy a new image | `scripts/redeploy.sh ghcr.io/intergalactictech/documenso:sha-<commit>` |
+| Build and deploy the fork | `scripts/redeploy.sh "$(scripts/build-image.sh <branch> \| tail -1)"` (CodeBuild, arm64, ~10 min, image in ECR) |
 | Upgrade to a new upstream release | Merge upstream into `main` (CI builds the image), or for unmodified upstream: `scripts/redeploy.sh documenso/documenso:vX.Y.Z` |
 | Shell on host | `aws ssm start-session --target $(terraform output -raw instance_id)` |
 | Logs | CloudWatch → `/signature/app` (streams `app`, `caddy`) |

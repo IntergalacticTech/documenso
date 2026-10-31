@@ -96,3 +96,14 @@ variable "source_repo_url" {
   type        = string
   default     = "https://github.com/IntergalacticTech/documenso.git"
 }
+
+variable "single_organisation_url" {
+  description = "URL slug of the one organisation every user joins."
+  type        = string
+  default     = "victorycto"
+}
+
+variable "single_organisation_name" {
+  type    = string
+  default = "VictoryCTO"
+}
