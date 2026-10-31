@@ -30,3 +30,7 @@ output "documents_bucket" {
 output "google_oauth_redirect_uri" {
   value = "https://${var.domain}/api/auth/callback/google"
 }
+
+output "ecr_repository_url" {
+  value = aws_ecr_repository.app.repository_url
+}

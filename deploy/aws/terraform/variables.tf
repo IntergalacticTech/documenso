@@ -90,3 +90,9 @@ variable "email_from_name" {
   type    = string
   default = "Victory CTO Signature"
 }
+
+variable "source_repo_url" {
+  description = "Public git repository the image build clones."
+  type        = string
+  default     = "https://github.com/IntergalacticTech/documenso.git"
+}

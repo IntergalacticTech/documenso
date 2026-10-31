@@ -48,6 +48,16 @@ resource "aws_iam_role_policy" "app" {
         Action   = ["logs:CreateLogStream", "logs:PutLogEvents", "logs:DescribeLogStreams"]
         Resource = "${aws_cloudwatch_log_group.app.arn}:*"
       },
+      {
+        Effect   = "Allow"
+        Action   = ["ecr:GetAuthorizationToken"]
+        Resource = "*"
+      },
+      {
+        Effect   = "Allow"
+        Action   = ["ecr:BatchGetImage", "ecr:GetDownloadUrlForLayer", "ecr:BatchCheckLayerAvailability"]
+        Resource = aws_ecr_repository.app.arn
+      },
     ]
   })
 }
@@ -96,8 +106,10 @@ resource "aws_instance" "app" {
     Name = var.name
   }
 
+  # user_data only bootstraps a fresh host; scripts/redeploy.sh keeps the host
+  # files current, so edits to them must not replace the instance.
   lifecycle {
-    ignore_changes = [ami]
+    ignore_changes = [ami, user_data]
   }
 
   depends_on = [aws_ssm_parameter.env, aws_ssm_parameter.image, aws_ssm_parameter.signing_cert]

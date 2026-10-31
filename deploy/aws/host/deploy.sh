@@ -33,6 +33,10 @@ image="$(ssm_get "$SSM_PREFIX/image")"
 
 export SIGNATURE_IMAGE="$image" SIGNATURE_DOMAIN LOG_GROUP AWS_REGION
 
+if [[ "$image" == *.dkr.ecr.*.amazonaws.com/* ]]; then
+  aws ecr get-login-password --region "$AWS_REGION" | docker login --username AWS --password-stdin "${image%%/*}"
+fi
+
 docker compose pull
 docker compose up -d --remove-orphans
 docker image prune -f >/dev/null

@@ -20,10 +20,17 @@ if [ -n "${1:-}" ]; then
   echo "Image set to $1"
 fi
 
+host_dir="$(cd "$(dirname "$0")/../host" && pwd)"
+sync_commands=()
+for f in compose.yml Caddyfile deploy.sh; do
+  sync_commands+=("echo $(base64 -w0 < "$host_dir/$f") | base64 -d > /opt/signature/$f")
+done
+sync_commands+=("chmod 700 /opt/signature/deploy.sh" "/opt/signature/deploy.sh")
+
 command_id="$(aws ssm send-command --region "$AWS_REGION" \
   --document-name AWS-RunShellScript \
   --targets "Key=tag:Name,Values=$INSTANCE_NAME" \
-  --parameters 'commands=["/opt/signature/deploy.sh"]' \
+  --parameters "$(jq -cn '$ARGS.positional | {commands: .}' --args "${sync_commands[@]}")" \
   --query Command.CommandId --output text)"
 
 echo "Sent command $command_id; waiting..."
