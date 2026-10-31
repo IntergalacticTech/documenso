@@ -192,7 +192,9 @@ export const isSigninDisabledGlobally = (): boolean => {
  * Check if signin is enabled for the given provider.
  * The master switch takes precedence over the per-provider flags.
  */
-export const isSigninEnabledForProvider = (provider: 'email' | 'google' | 'microsoft' | 'oidc'): boolean => {
+export const isSigninEnabledForProvider = (
+  provider: 'email' | 'google' | 'microsoft' | 'oidc' | 'passkey',
+): boolean => {
   if (isSigninDisabledGlobally()) {
     return false;
   }
@@ -202,6 +204,7 @@ export const isSigninEnabledForProvider = (provider: 'email' | 'google' | 'micro
     google: 'NEXT_PUBLIC_DISABLE_GOOGLE_SIGNIN',
     microsoft: 'NEXT_PUBLIC_DISABLE_MICROSOFT_SIGNIN',
     oidc: 'NEXT_PUBLIC_DISABLE_OIDC_SIGNIN',
+    passkey: 'NEXT_PUBLIC_DISABLE_PASSKEY_SIGNIN',
   } as const;
 
   return env(flagMap[provider]) !== 'true';

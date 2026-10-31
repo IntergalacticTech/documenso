@@ -1,6 +1,6 @@
 import { createCheckoutSession } from '@documenso/ee/server-only/stripe/create-checkout-session';
 import { createCustomer } from '@documenso/ee/server-only/stripe/create-customer';
-import { IS_BILLING_ENABLED, NEXT_PUBLIC_WEBAPP_URL } from '@documenso/lib/constants/app';
+import { IS_BILLING_ENABLED, IS_SINGLE_ORGANISATION_MODE, NEXT_PUBLIC_WEBAPP_URL } from '@documenso/lib/constants/app';
 import { AppError, AppErrorCode } from '@documenso/lib/errors/app-error';
 import { createOrganisation } from '@documenso/lib/server-only/organisation/create-organisation';
 import { getSubscriptionClaim } from '@documenso/lib/server-only/subscription/get-subscription-claim';
@@ -23,6 +23,12 @@ export const createOrganisationRoute = authenticatedProcedure
         priceId,
       },
     });
+
+    if (IS_SINGLE_ORGANISATION_MODE()) {
+      throw new AppError(AppErrorCode.UNAUTHORIZED, {
+        message: 'This instance only allows a single organisation.',
+      });
+    }
 
     // Check if user can create a free organiastion.
     if (IS_BILLING_ENABLED() && !priceId) {

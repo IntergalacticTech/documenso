@@ -1,3 +1,4 @@
+import { IS_SINGLE_ORGANISATION_MODE } from '@documenso/lib/constants/app';
 import { useSession } from '@documenso/lib/client-only/providers/session';
 import { ORGANISATION_MEMBER_ROLE_MAP } from '@documenso/lib/constants/organisations-translations';
 import { TEAM_MEMBER_ROLE_MAP } from '@documenso/lib/constants/teams-translations';
@@ -73,11 +74,13 @@ export default function DashboardPage() {
               </p>
             </div>
 
-            <Button asChild className="mt-4" variant="outline">
-              <Link to="/settings/organisations?action=add-organisation">
-                <Trans>Create organisation</Trans>
-              </Link>
-            </Button>
+            {!IS_SINGLE_ORGANISATION_MODE() && (
+              <Button asChild className="mt-4" variant="outline">
+                <Link to="/settings/organisations?action=add-organisation">
+                  <Trans>Create organisation</Trans>
+                </Link>
+              </Button>
+            )}
           </div>
         )}
 

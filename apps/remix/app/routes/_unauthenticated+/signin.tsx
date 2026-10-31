@@ -39,6 +39,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   const isGoogleSSOEnabled = IS_GOOGLE_SSO_ENABLED && isSigninEnabledForProvider('google');
   const isMicrosoftSSOEnabled = IS_MICROSOFT_SSO_ENABLED && isSigninEnabledForProvider('microsoft');
   const isOIDCSSOEnabled = IS_OIDC_SSO_ENABLED && isSigninEnabledForProvider('oidc');
+  const isPasskeySigninEnabled = isSigninEnabledForProvider('passkey');
 
   // Automatically redirect to OIDC when it is the only enabled signin transport,
   // unless the redirect has been explicitly disabled via env.
@@ -49,11 +50,13 @@ export async function loader({ request }: Route.LoaderArgs) {
 
   const oidcProviderLabel = OIDC_PROVIDER_LABEL;
 
+  // An SSO button on this page already creates the account on first use, so the
+  // "Sign up" link only offers something extra for providers not shown here.
   const isSignupEnabled =
     isSignupEnabledForProvider('email') ||
-    (IS_GOOGLE_SSO_ENABLED && isSignupEnabledForProvider('google')) ||
-    (IS_MICROSOFT_SSO_ENABLED && isSignupEnabledForProvider('microsoft')) ||
-    (IS_OIDC_SSO_ENABLED && isSignupEnabledForProvider('oidc'));
+    (IS_GOOGLE_SSO_ENABLED && isSignupEnabledForProvider('google') && !isGoogleSSOEnabled) ||
+    (IS_MICROSOFT_SSO_ENABLED && isSignupEnabledForProvider('microsoft') && !isMicrosoftSSOEnabled) ||
+    (IS_OIDC_SSO_ENABLED && isSignupEnabledForProvider('oidc') && !isOIDCSSOEnabled);
 
   let returnTo = new URL(request.url).searchParams.get('returnTo') ?? undefined;
 
@@ -68,6 +71,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     isGoogleSSOEnabled,
     isMicrosoftSSOEnabled,
     isOIDCSSOEnabled,
+    isPasskeySigninEnabled,
     isSignupEnabled,
     oidcProviderLabel,
     returnTo,
@@ -81,6 +85,7 @@ export default function SignIn({ loaderData }: Route.ComponentProps) {
     isGoogleSSOEnabled,
     isMicrosoftSSOEnabled,
     isOIDCSSOEnabled,
+    isPasskeySigninEnabled,
     isSignupEnabled,
     oidcProviderLabel,
     returnTo,
@@ -138,6 +143,7 @@ export default function SignIn({ loaderData }: Route.ComponentProps) {
           isGoogleSSOEnabled={isGoogleSSOEnabled}
           isMicrosoftSSOEnabled={isMicrosoftSSOEnabled}
           isOIDCSSOEnabled={isOIDCSSOEnabled}
+          isPasskeySigninEnabled={isPasskeySigninEnabled}
           oidcProviderLabel={oidcProviderLabel}
           returnTo={returnTo}
         />

@@ -63,6 +63,7 @@ export type SignInFormProps = {
   isGoogleSSOEnabled?: boolean;
   isMicrosoftSSOEnabled?: boolean;
   isOIDCSSOEnabled?: boolean;
+  isPasskeySigninEnabled?: boolean;
   oidcProviderLabel?: string;
   returnTo?: string;
 
@@ -79,6 +80,7 @@ export const SignInForm = ({
   isGoogleSSOEnabled,
   isMicrosoftSSOEnabled,
   isOIDCSSOEnabled,
+  isPasskeySigninEnabled = true,
   oidcProviderLabel,
   returnTo,
   hideForgotPassword = false,
@@ -460,18 +462,20 @@ export const SignInForm = ({
             </Button>
           )}
 
-          <Button
-            type="button"
-            size="lg"
-            variant="outline"
-            disabled={isSubmitting}
-            loading={isPasskeyLoading}
-            className="border bg-background text-muted-foreground"
-            onClick={onSignInWithPasskey}
-          >
-            {!isPasskeyLoading && <KeyRoundIcon className="mr-1 -ml-1 h-5 w-5" />}
-            <Trans>Passkey</Trans>
-          </Button>
+          {isPasskeySigninEnabled && (
+            <Button
+              type="button"
+              size="lg"
+              variant="outline"
+              disabled={isSubmitting}
+              loading={isPasskeyLoading}
+              className="border bg-background text-muted-foreground"
+              onClick={onSignInWithPasskey}
+            >
+              {!isPasskeyLoading && <KeyRoundIcon className="mr-1 -ml-1 h-5 w-5" />}
+              <Trans>Passkey</Trans>
+            </Button>
+          )}
         </fieldset>
       </form>
 

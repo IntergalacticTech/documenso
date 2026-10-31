@@ -1,3 +1,4 @@
+import { IS_SINGLE_ORGANISATION_MODE } from '@documenso/lib/constants/app';
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 
@@ -16,7 +17,7 @@ export default function TeamsSettingsPage() {
         subtitle={_(msg`Manage all organisations you are currently associated with.`)}
         hideDivider
       >
-        <OrganisationCreateDialog />
+        {!IS_SINGLE_ORGANISATION_MODE() && <OrganisationCreateDialog />}
       </SettingsHeader>
 
       <UserOrganisationsTable />

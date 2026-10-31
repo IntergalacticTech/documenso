@@ -1,7 +1,7 @@
 import { authClient } from '@documenso/auth/client';
 import { useOptionalCurrentOrganisation } from '@documenso/lib/client-only/providers/organisation';
 import { useSession } from '@documenso/lib/client-only/providers/session';
-import { IS_BILLING_ENABLED } from '@documenso/lib/constants/app';
+import { IS_BILLING_ENABLED, IS_SINGLE_ORGANISATION_MODE } from '@documenso/lib/constants/app';
 import { EXTENDED_ORGANISATION_MEMBER_ROLE_MAP } from '@documenso/lib/constants/organisations-translations';
 import { EXTENDED_TEAM_MEMBER_ROLE_MAP } from '@documenso/lib/constants/teams-translations';
 import { formatAvatarUrl } from '@documenso/lib/utils/avatars';
@@ -189,12 +189,14 @@ export const OrgMenuSwitcher = () => {
                 </div>
               ))}
 
-              <Button variant="ghost" className="w-full justify-start" asChild>
-                <Link to="/settings/organisations?action=add-organisation">
-                  <Plus className="mr-2 h-4 w-4" />
-                  <Trans>Create Organisation</Trans>
-                </Link>
-              </Button>
+              {!IS_SINGLE_ORGANISATION_MODE() && (
+                <Button variant="ghost" className="w-full justify-start" asChild>
+                  <Link to="/settings/organisations?action=add-organisation">
+                    <Plus className="mr-2 h-4 w-4" />
+                    <Trans>Create Organisation</Trans>
+                  </Link>
+                </Button>
+              )}
             </div>
           </div>
 

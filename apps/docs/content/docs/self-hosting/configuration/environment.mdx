@@ -277,6 +277,7 @@ For detailed certificate setup, see [Signing Certificate](/docs/self-hosting/con
 | `NEXT_PUBLIC_DISABLE_GOOGLE_SIGNIN`          | Hide the Google signin button                                                       | `false` |
 | `NEXT_PUBLIC_DISABLE_MICROSOFT_SIGNIN`       | Hide the Microsoft signin button                                                    | `false` |
 | `NEXT_PUBLIC_DISABLE_OIDC_SIGNIN`            | Hide the OIDC signin button                                                         | `false` |
+| `NEXT_PUBLIC_DISABLE_PASSKEY_SIGNIN`         | Hide the passkey signin button and reject passkey signins                           | `false` |
 | `NEXT_PUBLIC_DISABLE_OIDC_AUTO_REDIRECT`     | Disable the automatic `/signin` redirect when OIDC is the only enabled transport    | `false` |
 | `NEXT_PUBLIC_POSTHOG_KEY`             | PostHog API key for analytics and feature flags                                     |         |
 | `NEXT_PUBLIC_FEATURE_BILLING_ENABLED` | Enable billing features                                                             | `false` |
@@ -316,6 +317,7 @@ You can control which methods are available for users to sign in with the follow
 - **`NEXT_PUBLIC_DISABLE_SIGNIN`** (master switch): Set to `true` to block all signin methods (email/password, Google, Microsoft, OIDC). Hides every signin entry point on `/signin` and rejects email/password signin server-side with a `SIGNIN_DISABLED` error.
 - **`NEXT_PUBLIC_DISABLE_EMAIL_PASSWORD_SIGNIN`**: Set to `true` to disable email/password signin only. The email/password form is hidden, the `/forgot-password` and `/reset-password` pages redirect to `/signin`, and the corresponding server endpoints reject requests. SSO signin is unaffected.
 - **`NEXT_PUBLIC_DISABLE_GOOGLE_SIGNIN`**, **`NEXT_PUBLIC_DISABLE_MICROSOFT_SIGNIN`**, **`NEXT_PUBLIC_DISABLE_OIDC_SIGNIN`**: Set to `true` to hide the matching SSO button on the signin page. Useful when an SSO provider is kept configured for account linking but not advertised as a signin entry point.
+- **`NEXT_PUBLIC_DISABLE_PASSKEY_SIGNIN`**: Set to `true` to hide the passkey button on the signin page and reject passkey signin requests. Combine with the flags above to allow a single SSO provider only. Passkeys used for document signing are unaffected.
 
 These flags are opt-in: when none are set, signin behaviour is unchanged from a stock Documenso instance.
 
@@ -497,6 +499,7 @@ NEXT_PRIVATE_SIGNING_PASSPHRASE="your-certificate-password"
 # NEXT_PUBLIC_DISABLE_GOOGLE_SIGNIN="true"
 # NEXT_PUBLIC_DISABLE_MICROSOFT_SIGNIN="true"
 # NEXT_PUBLIC_DISABLE_OIDC_SIGNIN="true"
+# NEXT_PUBLIC_DISABLE_PASSKEY_SIGNIN="true"
 
 # Opt out of the automatic OIDC redirect when OIDC is the only enabled transport (optional)
 # NEXT_PUBLIC_DISABLE_OIDC_AUTO_REDIRECT="true"

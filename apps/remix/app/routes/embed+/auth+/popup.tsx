@@ -277,6 +277,7 @@ export default function EmbedAuthPopupPage({ loaderData }: Route.ComponentProps)
             className="w-full max-w-sm"
             initialEmail={email}
             isEmailPasswordSigninEnabled={isSigninEnabledForProvider('email')}
+            isPasskeySigninEnabled={isSigninEnabledForProvider('passkey')}
             returnTo={returnTo}
             hideForgotPassword
             onUnverifiedEmail={() => setState({ status: 'unverified-email' })}

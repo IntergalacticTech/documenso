@@ -7,6 +7,16 @@ export const APP_DOCUMENT_UPLOAD_SIZE_LIMIT = Number(env('NEXT_PUBLIC_DOCUMENT_S
 export const NEXT_PUBLIC_WEBAPP_URL = () => env('NEXT_PUBLIC_WEBAPP_URL') ?? 'http://localhost:3000';
 
 /**
+ * When set, every user belongs to this one organisation (by url) instead of
+ * getting a personal organisation, and creating other organisations is disabled.
+ */
+export const SINGLE_ORGANISATION_URL = () => env('NEXT_PUBLIC_SINGLE_ORGANISATION_URL') || null;
+
+export const IS_SINGLE_ORGANISATION_MODE = () => SINGLE_ORGANISATION_URL() !== null;
+
+export const SINGLE_ORGANISATION_NAME = () => env('NEXT_PRIVATE_SINGLE_ORGANISATION_NAME') || 'Organisation';
+
+/**
  * The sub-path the app is served under (no trailing slash), e.g. "/ESign".
  * Returns an empty string when served at root.
  *
