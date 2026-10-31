@@ -63,6 +63,18 @@ variable "google_client_secret" {
   }
 }
 
+variable "route53_zone_name" {
+  description = "If the domain's DNS is in Route 53 in this account, its zone name; Terraform then creates the A and DKIM records. Leave empty to add them by hand."
+  type        = string
+  default     = ""
+}
+
+variable "create_ses_identity" {
+  description = "Verify email_from_domain in SES. Set false if it is already a verified SES identity in this account/region."
+  type        = bool
+  default     = true
+}
+
 variable "email_from_domain" {
   description = "Domain verified in SES and used for the From address."
   type        = string

@@ -5,3 +5,4 @@ terraform/terraform.tfvars
 terraform/.terraform.lock.hcl
 *.p12
 .env
+terraform/tfplan

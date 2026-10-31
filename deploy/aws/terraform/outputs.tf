@@ -4,10 +4,10 @@ output "public_ip" {
 }
 
 output "dns_records" {
-  description = "Records to add at your DNS provider for victorycto.com."
+  description = "Records to add at your DNS provider (already created when route53_zone_name is set)."
   value = concat(
     [{ type = "A", name = var.domain, value = aws_eip.app.public_ip }],
-    [for t in aws_sesv2_email_identity.sender.dkim_signing_attributes[0].tokens : {
+    [for t in local.dkim_tokens : {
       type  = "CNAME"
       name  = "${t}._domainkey.${var.email_from_domain}"
       value = "${t}.dkim.amazonses.com"

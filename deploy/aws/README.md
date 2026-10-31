@@ -55,8 +55,7 @@ cd deploy/aws
 cp .env.example .env        # fill in Part 1
 set -a; source .env; set +a
 cd terraform
-# Recommended: enable the S3 backend block in versions.tf first.
-terraform init
+terraform init -backend-config=backend.hcl   # state bucket must already exist
 terraform apply
 terraform output dns_records
 ```
@@ -65,6 +64,10 @@ The instance boots, installs Docker, pulls config from SSM and starts the app.
 HTTPS won't work until DNS is in place (step 3); Caddy keeps retrying.
 
 ### 3. DNS
+
+Skip this step when `route53_zone_name` is set (as it is in
+`victorycto.auto.tfvars`): Terraform creates the records itself.
+
 
 Add the records from `terraform output dns_records` at the DNS provider for
 `victorycto.com`:
